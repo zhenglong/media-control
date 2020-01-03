@@ -1,4 +1,4 @@
-多媒体播放器，用法
+视频播放器，用法
 
 ``` javascript
 let mediaControl = new MediaControl({
