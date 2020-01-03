@@ -1,6 +1,6 @@
 多媒体播放器，用法
 
-```
+``` javascript
 let mediaControl = new MediaControl({
     container: $('.watch-area'),
     mediaSource: $('.watch-area .media-area video')[0] || $('.watch-area .media-area audio')[0],
