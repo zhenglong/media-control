@@ -27,9 +27,6 @@ export default class MediaControl {
     this.onTimeUpdateCallback = props.onTimeUpdateCallback; //指定视频播放回调处理
     this.onAfterPlayCallback = props.onAfterPlayCallback; // 开始播放之后回调函数
     this.onEndedCallback = props.onEndedCallback; // 播放结束时回调函数
-    // this.canvas = $('.onscreen-video');
-    // this.canvas.attr('width', this.canvas.width())
-    //   .attr('height', this.canvas.height());
   }
 
   startUpdateTimeTimer() {
@@ -72,17 +69,10 @@ export default class MediaControl {
       this.onAfterPlayCallback && this.onAfterPlayCallback();
     }
 
-    let audioAnimation = $('.media-area .audio-animation', this.container);
+    let audioAnimation = $('.audio-animation', this.container);
     if (audioAnimation.length && !audioAnimation.hasClass('visible')) {
       audioAnimation.addClass('visible');
     }
-    // $('.media-control .btn-play-state').toggleClass('play pause');
-    // let context = this.canvas[0].getContext('2d');
-    // const step = () => {
-    //     context.drawImage(this.mediaSource, 0, 0, this.canvas.width(), this.canvas.height());
-    //     requestAnimationFrame(step);
-    // }
-    // requestAnimationFrame(step);
   }
 
   onStop(isShowMaskImmediate) {
@@ -115,7 +105,7 @@ export default class MediaControl {
       }, 150);
     }
     this.mediaSource.pause();
-    let audioAnimation = $('.media-area .audio-animation', this.container);
+    let audioAnimation = $('.audio-animation', this.container);
     if (audioAnimation.length && audioAnimation.hasClass('visible')) {
       audioAnimation.removeClass('visible');
     }
@@ -187,7 +177,7 @@ export default class MediaControl {
         }
 
         // 如果是音频，要隐藏动效
-        let audioAnimation = $('.media-area .audio-animation', this.container);
+        let audioAnimation = $('.audio-animation', this.container);
         if (audioAnimation.length && audioAnimation.hasClass('visible')) {
           audioAnimation.removeClass('visible');
           $('.audio-animation-layer', this.container).removeClass('start-playing');
@@ -197,13 +187,13 @@ export default class MediaControl {
 
         let watchingCompleted = $('.watching-completed', this.container);
         if (watchingCompleted.length < 1) {//若已创建就不再创建
-          $('.media-area', this.container).append($(TplWatchingCompleted));
+          this.container.append($(TplWatchingCompleted));
         }
 
         //音频重新播放控制
         $('.watching-completed .btn-replay', this.container).on('click', e => {
           $('.watching-completed', this.container).remove();
-          $('.media-area .audio-animation', this.container).addClass('visible');
+          $('.audio-animation', this.container).addClass('visible');
           $('.audio-animation-layer', this.container).addClass('start-playing');
           if ($('.btn-practise', this.container).length > 0) {
             this.seek(0);//重置视频为0开始，仅针对看视频处
@@ -261,8 +251,7 @@ export default class MediaControl {
     // 单机视频区域，唤起视频操控界面  
 
     function singleOrDouble(_this) {
-      var videoFace = $('video', _this.container)
-      // || $('.media-area .audio-animation-layer', _this.container);
+      var videoFace = $('video', _this.container);
       //单击
       let controBarFlag = 0; //控制条的开关，默认打开控制条
       let playPauseFlag = -1;
@@ -336,18 +325,6 @@ export default class MediaControl {
       }
       this.state.isSeekingTrack = false;
     });
-    // let mediaArea = $('.media-area');
-    // $(window).on('scroll', e => {
-    //     if (!this.state.hasSetParentContainerSize) {
-    //         return;
-    //     }
-    //     // 视频滚动时置顶可见
-    //     if ($(window).scrollTop() > 0) {
-    //         if (!mediaArea.hasClass('on-screen')) {
-    //             mediaArea.addClass('on-screen');
-    //         }
-    //     }
-    // });
   }
 
   /**
