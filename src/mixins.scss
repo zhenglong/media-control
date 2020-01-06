@@ -1,0 +1,383 @@
+@mixin singleEllipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin seperatorLine($direction) {
+    content: '';
+    display: block;
+    position: absolute;
+    background: #e6e6e6;
+    z-index: 2;
+
+    @if $direction=='top'or $direction=='bottom' {
+        transform-origin: 50% 0%;
+
+        @media (-webkit-device-pixel-ratio: 2) {
+            & {
+                transform: scaleY(0.5);
+            }
+        }
+
+        @media (-webkit-device-pixel-ratio: 3) {
+            & {
+                transform: scaleY(0.33);
+            }
+        }
+    }
+
+    @else if $direction=='left'or $direction=='right' {
+        transform-origin: 0% 50%;
+
+        @media (-webkit-device-pixel-ratio: 2) {
+            & {
+                transform: scaleX(0.5);
+            }
+        }
+
+        @media (-webkit-device-pixel-ratio: 3) {
+            & {
+                transform: scaleX(0.33);
+            }
+        }
+    }
+
+    html.pixel-ratio-2 & {
+        transform: scaleY(0.5);
+    }
+
+    html.pixel-ratio-3 & {
+        transform: scaleY(0.33);
+    }
+
+    @if $direction=='top' {
+        height: 1px;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: auto;
+    }
+
+    @else if $direction=='bottom' {
+        height: 1px;
+        left: 0;
+        right: 0;
+        top: auto;
+        bottom: 0;
+    }
+
+    @else if $direction=='left' {
+        width: 1px;
+        left: 0;
+        right: auto;
+        top: 0;
+        bottom: 0;
+    }
+
+    @else if $direction=='right' {
+        width: 1px;
+        left: auto;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+}
+
+@mixin clearfix {
+    /**
+         * For IE 6/7 only
+         * Include this rule to trigger hasLayout and contain floats.
+         */
+    *zoom: 1;
+
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+
+    &:after {
+        clear: both;
+    }
+}
+
+@function toFixed($num) {
+    $base: 10000;
+    @return round($num*$base) / $base;
+}
+
+@function fx($x) {
+    @return toFixed($x / 64) * 1rem; //按640的设计稿，统一宽度10rem;
+}
+
+@function fx1($x) {
+    @return toFixed($x / 32) * 1rem; //按320的设计稿，统一宽度10rem;
+}
+
+@function fx2($x) {
+    @return toFixed($x / 36) * 1rem; //按360的设计稿，统一宽度10rem;
+}
+
+@function fx3($x) {
+    @return toFixed($x / 37.5) * 1rem; //按375的设计稿，统一宽度10rem;
+}
+
+@function fx4($x) {
+    @return toFixed($x / 54) * 1rem; //按540的设计稿，统一宽度10rem;
+}
+
+@function fx6($x) {
+    @return toFixed($x / 75) * 1rem; //按750的设计稿，统一宽度10rem;
+}
+
+@function fx9($x) {
+    @return toFixed($x / 112.5) * 1rem; //按1125的设计稿，统一宽度10rem;
+}
+
+@function fx5($x) {
+    @return toFixed($x / 66.7) * 1rem; //按667的设计稿，统一宽度10rem;
+}
+
+@function fx4To3($x) {
+    @return fx3($x * 768 / 540);
+}
+
+@mixin textEllipse($maxWidth:0) {
+    @if $maxWidth !=0 {
+        max-width: $maxWidth;
+    }
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@mixin multiLineEllipse($lineHeight, $lines) {
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: $lineHeight;
+    max-height: $lines*$lineHeight;
+}
+
+@mixin adaptiveIphoneX($direction, $isBoxingSizingSet: true) {
+    @supports (padding: max(0px)) {
+        @if ($isBoxingSizingSet) {
+            box-sizing: content-box !important;
+        }
+
+        @if $direction=='bottom' {
+            padding-bottom: constant(safe-area-inset-+$direction) !important;
+            padding-bottom: env(safe-area-inset-+$direction) !important;
+        }
+
+        @else if $direction=='top' {
+            padding-top: constant(safe-area-inset-+$direction) !important;
+            padding-top: env(safe-area-inset-+$direction) !important;
+        }
+
+        @else if $direction=='left' {
+            padding-left: constant(safe-area-inset-+$direction) !important;
+            padding-left: env(safe-area-inset-+$direction) !important;
+        }
+
+        @else if $direction=='right' {
+            padding-right: constant(safe-area-inset-+$direction) !important;
+            padding-right: env(safe-area-inset-+$direction) !important;
+        }
+    }
+}
+
+@mixin adaptivePc($direction, $elemWidth:0px) {
+    @if $direction=='bottom'or $direction=='top' {
+        @media screen and (min-width: 800px) {
+            width: 800px;
+            left: 50%;
+            margin-left: -400px;
+        }
+    }
+
+    @else if $direction=='right' {
+        @media screen and (min-width: 800px) {
+            right: 50%;
+            margin-left: -$elemWidth/2;
+            transform: translate((800px-$elemWidth)/2, 0);
+        }
+    }
+}
+
+@mixin placeholder($color:#ccc) {
+    &::-webkit-input-placeholder {
+        color: $color;
+    }
+
+    &::-moz-placholder {
+        color: $color;
+    }
+
+    &::-ms-input-placeholder {
+        color: $color;
+    }
+
+    &::-moz-placholder {
+        color: $color;
+    }
+}
+
+@mixin scrollbar() {
+    &::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #e6e6e6;
+        border-radius: 2px;
+    }
+}
+
+@mixin halfBorder($borderColor, $borderRadius:0) {
+    content: '';
+    border: 1px solid $borderColor;
+    border-radius: $borderRadius;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: transparent;
+    transform-origin: 0% 0%;
+    z-index: -1;
+
+    @media (-webkit-device-pixel-ratio: 2) {
+        & {
+            width: 200%;
+            height: 200%;
+            border-radius: $borderRadius*2;
+            transform: scale(0.5);
+        }
+    }
+
+    @media (-webkit-device-pixel-ratio: 3) {
+        & {
+            width: 300%;
+            height: 300%;
+            border-radius: $borderRadius*3;
+            transform: scale(0.33);
+        }
+    }
+}
+
+@mixin layoutClampToLeftRightEdge() {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+
+    &>div {
+        display: table-cell;
+        vertical-align: middle;
+
+        &:first-child {
+            text-align: left;
+        }
+
+        &:last-child {
+            text-align: right;
+        }
+    }
+}
+
+@mixin smallFontVerticalMiddle($fontSize, $lineHeight) {
+    font-size: $fontSize*2;
+    line-height: $lineHeight*2;
+    height: $lineHeight*2;
+    transform: translate(0 -25%) scale(.5);
+    transform-origin: left center;
+    display: inline-block;
+}
+
+/*loading旋转*/
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(359deg);
+    }
+}
+
+
+/*滑动效果*/
+@keyframes sliderUp {
+    0% {
+        bottom: fx3(-200);
+    }
+
+    100% {
+        bottom: 0;
+    }
+}
+
+/*滑动效果*/
+@keyframes sliderDown {
+    0% {
+        bottom: 0;
+    }
+
+    100% {
+        bottom: fx3(-200);
+    }
+}
+
+/* modal 弹出效果*/
+@keyframes modalAppear {
+    0% {
+        transform: scale(0);
+        opacity: 0
+    }
+
+    60% {
+        transform: scale(1.2);
+        opacity: 1
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1
+    }
+}
+
+/* modal 消失效果*/
+@keyframes modalDisAppear {
+    0% {
+        transform: scale(1);
+        opacity: 1
+    }
+
+    40% {
+        transform: scale(1.2);
+        opacity: 1
+    }
+
+    100% {
+        transform: scale(0);
+        opacity: 0
+    }
+}
+
+/* 错误提示信息出现的效果 */
+@keyframes errorShow {
+    from {
+        opacity: 0;
+        margin-top: fx3(-20)
+    }
+
+    to {
+        opacity: 1;
+        margin-top: fx3(3)
+    }
+}

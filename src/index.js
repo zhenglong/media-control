@@ -1,9 +1,7 @@
 import './index.scss';
 import Tpl from './index.html';
 import Mustache from 'mustache';
-import model from '../../model';
 import TplWatchingCompleted from './watching-completed.html';
-import iosXjudg from '../../ios-x-judg';
 
 let ua = navigator.userAgent.toLowerCase();
 const isAndroidX5 = ua.indexOf('android') > -1 && ua.indexOf('mqqbrowser') > -1 && ua.indexOf('mobile') > -1;
@@ -145,14 +143,10 @@ export default class MediaControl {
   }
 
   componentDidMount() {
-    let iosHeadAddHeight = 0;
     $('.watch-area .media-area-outer').css({
       height: `${$('body').width() * (422 / 750)}px`
     });
-    if (hjc.isios && iosXjudg()) {
-      iosHeadAddHeight = 40;
-    }
-    $('.watch-area').css('padding-top', `${$('.fix-top').height() + iosHeadAddHeight}px`);
+    $('.watch-area').css('padding-top', `${$('.fix-top').height()}px`);
     //3s后自动隐藏视频控制条
     var autoHideControlBar = null;
     this.state.hasSetParentContainerSize = true;
@@ -182,16 +176,6 @@ export default class MediaControl {
       $('.audio-animation-layer', this.container).addClass('start-playing');
       $('.media-control', this.container).addClass('visible');
       clickToPlay($('.media-control .btn-play-state', this.container));
-      if ($('.oral-practise').hasClass('active')) { //核心句子练习打点 
-        window.ht && window.ht.sendCustomEvent('ttxwy_practice_listen_click', {
-          content_id: model.id,
-          line: $('.oral-practise .completed-count').text()
-        });
-      } else { //看视频打点 
-        window.ht && window.ht.sendCustomEvent('ttxwy_playbutton_click', {
-          content_id: model.id
-        });
-      }
     });
     // 同步播放进度条 
     if(this.mediaSource){
@@ -214,9 +198,7 @@ export default class MediaControl {
           $('.audio-animation-layer', this.container).removeClass('start-playing');
         }
 
-        hjc.ajax(`/dailyapi/v1/daily_study/content/${model.id}/study_log`, null, true, data => {
-          console.log('音视频播放完成');
-        });
+        console.log('音视频播放完成');
 
         let watchingCompleted = $('.watching-completed', this.container);
         if (watchingCompleted.length < 1) {//若已创建就不再创建
@@ -232,11 +214,7 @@ export default class MediaControl {
             this.seek(0);//重置视频为0开始，仅针对看视频处
           }
           videoElem.css('display', '');
-          // this.mediaSource.play();
           this.onPlay();
-          window.ht && window.ht.sendCustomEvent('ttxwy_play_replay_click', {
-            content_id: model.id
-          });
         });
         $('.watching-completed .btn-practise', this.container).on('click', e => {
           
@@ -252,9 +230,6 @@ export default class MediaControl {
             $('body').toggleClass('grey-bg');
             $('.oral-practise').addClass('active');
           }
-          window.ht && window.ht.sendCustomEvent('ttxwy_play_topractice_click', {
-            content_id: model.id
-          });
         });
         this.onEndedCallback && this.onEndedCallback();
         this.onEndedCallback2 && this.onEndedCallback2();
