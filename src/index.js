@@ -18,7 +18,7 @@ export default class MediaControl {
       isPrecisionUpdateTimeNeeded: props.isPrecisionUpdateTimeNeeded,
       startTime: props.startTime,
       passedTime: 0.0,
-      totalTime: props.totoalTime,
+      totalTime: props.totalTime, // 单位：秒
       isSeekingTrack: false,
       hasSetParentContainerSize: false
     };
@@ -27,7 +27,6 @@ export default class MediaControl {
     this.onTimeUpdateCallback = props.onTimeUpdateCallback; //指定视频播放回调处理
     this.onAfterPlayCallback = props.onAfterPlayCallback; // 开始播放之后回调函数
     this.onEndedCallback = props.onEndedCallback; // 播放结束时回调函数
-    this.onEndedCallback2 = props.onEndedCallback2;
     // this.canvas = $('.onscreen-video');
     // this.canvas.attr('width', this.canvas.width())
     //   .attr('height', this.canvas.height());
@@ -143,10 +142,6 @@ export default class MediaControl {
   }
 
   componentDidMount() {
-    $('.watch-area .media-area-outer').css({
-      height: `${$('body').width() * (422 / 750)}px`
-    });
-    $('.watch-area').css('padding-top', `${$('.fix-top').height()}px`);
     //3s后自动隐藏视频控制条
     var autoHideControlBar = null;
     this.state.hasSetParentContainerSize = true;
@@ -232,7 +227,6 @@ export default class MediaControl {
           }
         });
         this.onEndedCallback && this.onEndedCallback();
-        this.onEndedCallback2 && this.onEndedCallback2();
         if (this.state.isPrecisionUpdateTimeNeeded) {
           this.stopUpdateTimer();
         }
@@ -387,8 +381,15 @@ export default class MediaControl {
   }
 
   render() {
-    $('.media-control-area', this.container).html(Mustache.render(Tpl, {
-      displayedTotalTime: MediaControl.displayedTimeText(this.state.totalTime)
-    }));
+    if (!this.container.hasClass('media-area')) {
+      this.container.addClass('media-area');
+    }
+    this.container.append($(`<div class="media-control-area">${
+      Mustache.render(Tpl, {
+        displayedTotalTime: MediaControl.displayedTimeText(this.state.totalTime)
+      })
+    } </div><div class="media-control-mask"><i class="btn-big-play"></i></div>`));
   }
 }
+
+window.MediaControlWidget = MediaControl;

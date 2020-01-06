@@ -78,6 +78,21 @@
     }
 }
 
+.media-area {
+    position: relative;
+    video {
+        display: block;
+        width: 100%;
+    }
+}
+.media-control-area {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+}
+
 .media-control {
     display: flex;
     align-items: center;

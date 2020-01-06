@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html data-dpr="1">
+<head>
+    <title>video player demo</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <link rel="stylesheet" href="../dist/media-control.50226802.css" />
+</head>
+<body>
+    <div class="media-area">
+        <video src="https://n1video.hjfile.cn/res7/2019/09/03/98c13145838ff6377d72e62e2f3741c0.mp4" />
+    </div>
+    <script src="./zepto.js"></script>
+    <script>
+    !(function flexible(d,b){var f=b.documentElement,c=1;function a(){var maxw=60;var g=d.innerWidth/10;f.style.fontSize=(g>maxw?maxw:g)+"px"}a();d.addEventListener("resize",a);d.addEventListener("pageshow",function(g){if(g.persisted){a()}})}(window,document));
+    </script>
+    <script src="../dist/media-control.e9cd0573.js"></script>
+    <script>
+    $(function() {
+        var mediaControl = new MediaControlWidget({
+            mediaSource: $('.media-area video')[0],
+            container: $('.media-area'),
+            totalTime: 26,
+            onTimeUpdateCallback: function() {
+                console.log('onTimeUpdateCallback');
+            },
+            onAfterPlayCallback: function() {
+                console.log('onAfterPlayCallback');
+            },
+            onEndedCallback: function() {
+                console.log('onEndedCallback');
+            },
+        });
+        mediaControl.render();
+        mediaControl.componentDidMount();
+    });
+    </script>
+</body>
+</html>

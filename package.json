@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack"
+    "start": "webpack",
+    "demo": "http-server ."
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "babel-loader": "^8.0.6",
     "css-loader": "^3.4.1",
     "html-loader": "^0.5.5",
+    "http-server": "^0.12.0",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.0",
     "postcss-loader": "^3.0.0",
