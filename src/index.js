@@ -181,7 +181,7 @@ export default class MediaControl {
         this.updatePastTime(this.state.totalTime);
 
         // 如果是视频，且安卓x5内核，则隐藏video
-        let videoElem = $('.media-area video', this.container);
+        let videoElem = $('video', this.container);
         if (isAndroidX5 && videoElem.length) {
           videoElem.css('display', 'none');
         }
@@ -261,7 +261,7 @@ export default class MediaControl {
     // 单机视频区域，唤起视频操控界面  
 
     function singleOrDouble(_this) {
-      var videoFace = $('.video-outer video,.media-area .audio-animation-layer', _this.container)
+      var videoFace = $('video', _this.container)
       // || $('.media-area .audio-animation-layer', _this.container);
       //单击
       let controBarFlag = 0; //控制条的开关，默认打开控制条
